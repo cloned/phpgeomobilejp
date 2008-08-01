@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<title>Geomobilejp_Converter - Manual</title>
+<style type="text/css">
+* { font-family: "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Meiryo, Arial, "ＭＳ Ｐゴシック", Sans-serif; }
+body { margin: 25px; padding: 0px; }
+h1 { font-size: 140%; }
+h2 { font-size: 100%; border-bottom: 3px solid #aaaaff; margin-top: 30px; }
+h3 { font-size: 90%; border-bottom: 1px solid #aaaaff; margin-top: 25px; }
+pre { font-family: Monaco, Consolas, "Courier New"; font-size: 70%; padding: 10px; color: #4f4f4f; background-color: #fff9d9; }
+p { font-size: 80%; color: #333333; }
+.footer { font-size: 70%; color: #666666; width: 100%; text-align: right; }
+.synSpecial { color: #c000c0; }
+.synType { color: #008000; }
+.synComment { color: #0000c0; }
+.synPreProc { color: #c000c0; }
+.synIdentifier { color: #008080; }
+.synConstant { color: #c00000; }
+.synStatement { color: #804000; }
+</style>
+</head>
+<body>
+
+<h1>Geomobilejp_Converter - Manual</h1>
+
+<h2>概要</h2>
+
+<p>Geomobilejp_Converterはモバイル端末のGPS機能で送信される情報を想定した、緯度経度フォーマット、測地系の相互変換ライブラリです。また、同梱されているGeomobilejp_IAreaを使用すると、緯度経度から<a href="http://www.nttdocomo.co.jp/service/imode/make/content/iarea/">オープンiエリア</a>のエリアコードやエリア名を取得することができます。</p>
+<p>同梱されているサンプルプログラム、Geomobilejp_Converter/sample/mobile_page_sample.phpにここで説明するコードのすべてが利用されていますので、実装の参考になるでしょう。</p>
+<p>PHPのバージョン5で動作します。</p>
+
+<h2>緯度経度の変換</h2>
+
+<h3>Geomobilejp_Converterを生成する</h3>
+
+<p>Geomobilejp_Converterクラスを生成します。第1引数に「緯度」、第2引数に「経度」、第3引数に測定した「測地系」を渡します。緯度経度のフォーマットは、度単位（degree）と度分秒単位（dms）に対応しています。</p>
+
+<pre><span class="synPreProc">require_once</span> '<span class="synConstant">/path/to/Geomobilejp/Converter.php</span>';
+
+<span class="synStatement">$</span><span class="synIdentifier">converter</span> <span class="synStatement">=</span> <span class="synPreProc">new</span> Geomobilejp_Converter<span class="synSpecial">(</span>'<span class="synConstant">35.21.03.340</span>', '<span class="synConstant">138.34.45.725</span>', '<span class="synConstant">wgs84</span>'<span class="synSpecial">)</span>;</pre>
+
+<h3>フォーマットを変換する</h3>
+
+<p>緯度経度を度単位（degree）と度分秒単位（dms）に相互変換することができます。</p>
+
+<pre><span class="synPreProc">require_once</span> '<span class="synConstant">/path/to/Geomobilejp/Converter.php</span>';
+
+<span class="synStatement">$</span><span class="synIdentifier">converter</span> <span class="synStatement">=</span> <span class="synPreProc">new</span> Geomobilejp_Converter<span class="synSpecial">(</span>'<span class="synConstant">35.21.03.340</span>', '<span class="synConstant">138.34.45.725</span>', '<span class="synConstant">wgs84</span>'<span class="synSpecial">)</span>;
+<span class="synStatement">$</span><span class="synIdentifier">converter</span> <span class="synStatement">=</span> <span class="synStatement">$</span><span class="synIdentifier">converter</span><span class="synType">-&gt;</span>format<span class="synSpecial">(</span>'<span class="synConstant">degree</span>'<span class="synSpecial">)</span>;
+
+<span class="synPreProc">echo</span> <span class="synStatement">$</span><span class="synIdentifier">converter</span><span class="synType">-&gt;</span>getLatitude<span class="synSpecial">()</span> <span class="synStatement">.</span> &quot;<span class="synSpecial">\n</span>&quot;;    <span class="synComment">// 35.350928</span>
+<span class="synPreProc">echo</span> <span class="synStatement">$</span><span class="synIdentifier">converter</span><span class="synType">-&gt;</span>getLongitude<span class="synSpecial">()</span> <span class="synStatement">.</span> &quot;<span class="synSpecial">\n</span>&quot;;   <span class="synComment">// 138.579368</span></pre>
+
+<h3>測地系を変換する</h3>
+
+<p>測地系を世界測地系（WGS84）と日本測地系（Tokyo）と日本測地系2000（JGD2000）に相互変換することができます。</p>
+
+<pre><span class="synPreProc">require_once</span> '<span class="synConstant">/path/to/Geomobilejp/Converter.php</span>';
+
+<span class="synStatement">$</span><span class="synIdentifier">converter</span> <span class="synStatement">=</span> <span class="synPreProc">new</span> Geomobilejp_Converter<span class="synSpecial">(</span>'<span class="synConstant">35.21.03.340</span>', '<span class="synConstant">138.34.45.725</span>', '<span class="synConstant">wgs84</span>'<span class="synSpecial">)</span>;
+<span class="synStatement">$</span><span class="synIdentifier">converter</span> <span class="synStatement">=</span> <span class="synStatement">$</span><span class="synIdentifier">converter</span><span class="synType">-&gt;</span>convert<span class="synSpecial">(</span>'<span class="synConstant">tokyo</span>'<span class="synSpecial">)</span>;
+
+<span class="synPreProc">echo</span> <span class="synStatement">$</span><span class="synIdentifier">converter</span><span class="synType">-&gt;</span>getLatitude<span class="synSpecial">()</span> <span class="synStatement">.</span> &quot;<span class="synSpecial">\n</span>&quot;;    <span class="synComment">// 35.20.51.663</span>
+<span class="synPreProc">echo</span> <span class="synStatement">$</span><span class="synIdentifier">converter</span><span class="synType">-&gt;</span>getLongitude<span class="synSpecial">()</span> <span class="synStatement">.</span> &quot;<span class="synSpecial">\n</span>&quot;;   <span class="synComment">// 138.34.56.905</span></pre>
+
+<h3>フォーマットと測地系を変換する</h3>
+
+<p>フォーマットの変換と測地系の変換は、Geomobilejp_Converterクラスのインスタンスが返ってきますので、相互変換を組み合わせることができます。</p>
+
+<pre><span class="synPreProc">require_once</span> '<span class="synConstant">/path/to/Geomobilejp/Converter.php</span>';
+
+<span class="synStatement">$</span><span class="synIdentifier">converter</span> <span class="synStatement">=</span> <span class="synPreProc">new</span> Geomobilejp_Converter<span class="synSpecial">(</span>'<span class="synConstant">34.700695</span>', '<span class="synConstant">135.495243</span>', '<span class="synConstant">wgs84</span>'<span class="synSpecial">)</span>;
+<span class="synStatement">$</span><span class="synIdentifier">converter</span> <span class="synStatement">=</span> <span class="synStatement">$</span><span class="synIdentifier">converter</span><span class="synType">-&gt;</span>convert<span class="synSpecial">(</span>'<span class="synConstant">tokyo</span>'<span class="synSpecial">)</span><span class="synType">-&gt;</span>format<span class="synSpecial">(</span>'<span class="synConstant">dms</span>'<span class="synSpecial">)</span>;
+
+<span class="synPreProc">echo</span> <span class="synStatement">$</span><span class="synIdentifier">converter</span><span class="synType">-&gt;</span>getLatitude<span class="synSpecial">()</span> <span class="synStatement">.</span> &quot;<span class="synSpecial">\n</span>&quot;;    <span class="synComment">// 34.41.50.830</span>
+<span class="synPreProc">echo</span> <span class="synStatement">$</span><span class="synIdentifier">converter</span><span class="synType">-&gt;</span>getLongitude<span class="synSpecial">()</span> <span class="synStatement">.</span> &quot;<span class="synSpecial">\n</span>&quot;;   <span class="synComment">// 135.29.53.007</span>
+</pre>
+
+<h2>オープンiエリアを取得</h2>
+
+<h3>iエリアデータファイルを準備する</h3>
+
+<p>docomoの提供する<a href="http://www.nttdocomo.co.jp/service/imode/make/content/iarea/">オープンiエリア</a>のエリアコードとエリア名を緯度経度から取得することができます。この機能を利用するためには、まずdocomo
+サイトで公開されている<a href="http://www.nttdocomo.co.jp/service/imode/make/content/iarea/">iエリアデータファイル</a>を取得して次のようにデータファイルを作成してください。尚、PHPの内部エンコーディングはUTF-8であることを想定しています。</p>
+
+<pre><span class="synComment"># iエリアデータファイルを取得します。</span>
+$ wget http://www.nttdocomo.co.jp/binary/archive/service/imode/make/content/iarea/iareadata.lzh
+
+<span class="synComment"># iエリアデータファイルを展開します（lhaコマンドがない場合は適宜他の方法で展開してください）。</span>
+$ lha e iareadata.lzh
+
+<span class="synComment"># iエリアデータファイルから1つのPHPデータファイルを作成します。</span>
+$ <span class="synStatement">cd</span> ./Geomobilejp_Converter/tools
+$ php ./create_iareadata.php ../../iareadata
+
+<span class="synComment"># 作成されたファイルをGeomobilejp/IAreaディレクトリに移動します。</span>
+$ <span class="synStatement">mv</span> ./iareadata.php ../lib/Geomobilejp/IArea/</pre>
+
+<h3>緯度経度からiエリアコードとiエリア名を取得する</h3>
+
+<p>iエリアデータファイルの準備ができるとGeomobilejp_IAreaを使用して、緯度経度からiエリアコードとiエリア名を取得することができます。</p>
+
+<pre><span class="synPreProc">require_once</span> '<span class="synConstant">/path/to/Geomobilejp/Converter.php</span>';
+<span class="synPreProc">require_once</span> '<span class="synConstant">/path/to/Geomobilejp/IArea.php</span>';
+
+<span class="synStatement">$</span><span class="synIdentifier">converter</span> <span class="synStatement">=</span> <span class="synPreProc">new</span> Geomobilejp_Converter<span class="synSpecial">(</span>'<span class="synConstant">34.700695</span>', '<span class="synConstant">135.495243</span>', '<span class="synConstant">wgs84</span>'<span class="synSpecial">)</span>;
+<span class="synStatement">$</span><span class="synIdentifier">area</span> <span class="synStatement">=</span> Geomobilejp_IArea<span class="synStatement">::</span>seekArea<span class="synSpecial">(</span><span class="synStatement">$</span><span class="synIdentifier">converter</span><span class="synSpecial">)</span>;
+
+<span class="synPreProc">echo</span> <span class="synStatement">$</span><span class="synIdentifier">area</span><span class="synType">-&gt;</span>getIAreaCode<span class="synSpecial">()</span> <span class="synStatement">.</span> &quot;<span class="synSpecial">\n</span>&quot;;    <span class="synComment">// 17202</span>
+<span class="synPreProc">echo</span> <span class="synStatement">$</span><span class="synIdentifier">area</span><span class="synType">-&gt;</span>getName<span class="synSpecial">()</span> <span class="synStatement">.</span> &quot;<span class="synSpecial">\n</span>&quot;;         <span class="synComment">// 大阪駅/阪急梅田駅周辺</span>
+</pre>
+
+<p>iエリアが見つからなかった場合、Geomobilejp_IArea::seekAreaはnullを返します。</p>
+
+<h2>キャリアの差</h2>
+
+<h3>パラメータの差を吸収する</h3>
+
+<p>docomo、au、SoftBank、WILLCOMのGPS機能で送信される緯度経度情報は、パラメータ名やフォーマットに違いがあります。User-Agentによる判定を行って、各違いを吸収する必要があります。Geomobilejp_Converterにはこれらの差をパラメータがあるかどうかのみを単純に判定して吸収するGeomobilejp_Mobileが同梱されています。他のUser-Agentを判定するライブラリを使用する場合には不要ですが、役に立つようであればご利用ください。</p>
+
+<pre><span class="synPreProc">require_once</span> '<span class="synConstant">/path/to/Geomobilejp/Mobile.php</span>';
+
+<span class="synStatement">$</span><span class="synIdentifier">mobile</span> <span class="synStatement">=</span> <span class="synPreProc">new</span> Geomobilejp_Mobile<span class="synSpecial">()</span>;
+
+<span class="synStatement">if</span> <span class="synSpecial">(</span><span class="synStatement">$</span><span class="synIdentifier">mobile</span><span class="synType">-&gt;</span>hasParameter<span class="synSpecial">())</span> <span class="synSpecial">{</span>
+
+    <span class="synPreProc">echo</span> <span class="synStatement">$</span><span class="synIdentifier">mobile</span><span class="synType">-&gt;</span>getLatitude<span class="synSpecial">()</span> <span class="synStatement">.</span> &quot;<span class="synSpecial">\n</span>&quot;;    <span class="synComment">// N35.44.33.150</span>
+    <span class="synPreProc">echo</span> <span class="synStatement">$</span><span class="synIdentifier">mobile</span><span class="synType">-&gt;</span>getLongitude<span class="synSpecial">()</span> <span class="synStatement">.</span> &quot;<span class="synSpecial">\n</span>&quot;;   <span class="synComment">// E135.22.33.121</span>
+    <span class="synPreProc">echo</span> <span class="synStatement">$</span><span class="synIdentifier">mobile</span><span class="synType">-&gt;</span>getDatum<span class="synSpecial">()</span> <span class="synStatement">.</span> &quot;<span class="synSpecial">\n</span>&quot;;       <span class="synComment">// wgs84</span>
+
+<span class="synSpecial">}</span></pre>
+
+<h3>HTMLのGPSタグを出し分ける</h3>
+
+<p>docomo、au、SoftBank、WILLCOMではそれぞれGPS機能を使用するためのHTML表記がありますが、Geomobilejp_Converterにはこの差を吸収する機能は実装されていません。実際にはGeomobilejp_Converter/sample/mobile_page_sample.phpに表記しているような各キャリア用のHTMLをUser-Agentを判定して出し分ける必要があります。</p>
+
+<div class="footer">2008/08/01 更新</div>
+
+</body>
+</html>
