@@ -40,10 +40,10 @@ class Geomobilejp_Converter_Format
 
     public static function detectFormat($latitude, $longitude)
     {
-        if (preg_match('/^\d+$/', $latitude)) {
+        if (ctype_digit(strval($latitude))) {
             $latitude .= '.0';
         }
-        if (preg_match('/^\d+$/', $longitude)) {
+        if (ctype_digit(strval($longitude))) {
             $longitude .= '.0';
         }
 
