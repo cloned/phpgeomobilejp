@@ -40,6 +40,13 @@ class Geomobilejp_Converter_Format
 
     public static function detectFormat($latitude, $longitude)
     {
+        if (preg_match('/^\d+$/', $latitude)) {
+            $latitude .= '.0';
+        }
+        if (preg_match('/^\d+$/', $longitude)) {
+            $longitude .= '.0';
+        }
+
         if (preg_match(self::DMS_LATITUDE_RE, $latitude)
                 && preg_match(self::DMS_LONGITUDE_RE, $longitude)) {
             return self::DMS;
